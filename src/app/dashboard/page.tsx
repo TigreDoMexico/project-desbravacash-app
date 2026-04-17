@@ -6,19 +6,19 @@ import { useAuth } from "@/context/AuthContext";
 import styles from "./dashboard.module.css";
 
 export default function DashboardPage() {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, isLoading, logout } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isAuthenticated) router.replace("/login");
-  }, [isAuthenticated, router]);
+    if (!isLoading && !isAuthenticated) router.replace("/login");
+  }, [isAuthenticated, isLoading, router]);
 
   const handleLogout = () => {
     logout();
     router.replace("/login");
   };
 
-  if (!isAuthenticated) return null;
+  if (isLoading || !isAuthenticated) return null;
 
   return (
     <div className={styles.container}>
