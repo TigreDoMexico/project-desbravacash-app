@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
 import styles from "./login.module.css";
+import { RealizarLogin } from "./service";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
+  const [telefone, setTelefone] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -20,18 +21,9 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      // Substitua pela chamada real à sua API
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!res.ok) throw new Error("Credenciais inválidas");
-
-      const { token } = await res.json();
+      const token = await RealizarLogin(telefone, password);
       login(token);
-      router.replace("/dashboard");
+      router.push("/dashboard");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Erro ao autenticar");
     } finally {
@@ -57,8 +49,8 @@ export default function LoginPage() {
             <input
               id="telefone"
               type="tel"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={telefone}
+              onChange={(e) => setTelefone(e.target.value)}
               placeholder="11XXXXXXXX"
               required
               autoComplete="tel"
