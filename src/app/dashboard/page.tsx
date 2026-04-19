@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { buscarUnidade } from "./service";
-import { UnidadeResponse } from "./interfaces";
+import { DadosDashboardResponse } from "./interfaces";
 import styles from "./dashboard.module.css";
 
 export default function DashboardPage() {
   const { token, isAuthenticated, isLoading, logout } = useAuth();
   const router = useRouter();
-  const [unidade, setUnidade] = useState<UnidadeResponse | null>(null);
+  const [dadosDashboard, setDadosDashboard] = useState<DadosDashboardResponse | null>(null);
   const [erro, setErro] = useState<string | null>(null);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!token) return;
     buscarUnidade(token)
-      .then(setUnidade)
+      .then(setDadosDashboard)
       .catch((e: Error) => setErro(e.message));
   }, [token]);
 
@@ -41,13 +41,13 @@ export default function DashboardPage() {
       </header>
       <main className={styles.main}>
         {erro && <p className={styles.erro}>{erro}</p>}
-        {unidade && (
+        {dadosDashboard && (
           <>
-            <p className={styles.unidadeNome}>{unidade.nome}</p>
+            <p className={styles.unidadeNome}>{dadosDashboard.unidade.nome}</p>
             <div className={styles.saldoCard}>
               <span className={styles.saldoLabel}>Saldo de Pontos</span>
               <span className={styles.saldoValor}>
-                {unidade.saldo.toLocaleString("pt-BR")} pts
+                {dadosDashboard.saldo} pts
               </span>
             </div>
             <button

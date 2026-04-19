@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "url": "/api/unidade/minha"
+    "url": "/api/unidade/dashboard"
   },
   "response": {
     "status": 200,
@@ -9,7 +9,9 @@
       "Content-Type": "application/json"
     },
     "jsonBody": {
-      "nome": "Unidade Desbravadores Central",
+      "unidade": {
+        "nome": "Minha Unidade"
+      },
       "saldo": 4750
     }
   }
