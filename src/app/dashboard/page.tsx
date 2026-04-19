@@ -1,17 +1,28 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { buscarUnidade } from "./service";
+import { UnidadeResponse } from "./interfaces";
 import styles from "./dashboard.module.css";
 
 export default function DashboardPage() {
-  const { isAuthenticated, isLoading, logout } = useAuth();
+  const { token, isAuthenticated, isLoading, logout } = useAuth();
   const router = useRouter();
+  const [unidade, setUnidade] = useState<UnidadeResponse | null>(null);
+  const [erro, setErro] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) router.replace("/login");
   }, [isAuthenticated, isLoading, router]);
+
+  useEffect(() => {
+    if (!token) return;
+    buscarUnidade(token)
+      .then(setUnidade)
+      .catch((e: Error) => setErro(e.message));
+  }, [token]);
 
   const handleLogout = () => {
     logout();
@@ -29,8 +40,24 @@ export default function DashboardPage() {
         </button>
       </header>
       <main className={styles.main}>
-        <h1>Dashboard</h1>
-        <p>Você está autenticado com sucesso.</p>
+        {erro && <p className={styles.erro}>{erro}</p>}
+        {unidade && (
+          <>
+            <p className={styles.unidadeNome}>{unidade.nome}</p>
+            <div className={styles.saldoCard}>
+              <span className={styles.saldoLabel}>Saldo de Pontos</span>
+              <span className={styles.saldoValor}>
+                {unidade.saldo.toLocaleString("pt-BR")} pts
+              </span>
+            </div>
+            <button
+              className={styles.extratoBtn}
+              onClick={() => router.push("/extrato")}
+            >
+              Ver Extrato da Conta
+            </button>
+          </>
+        )}
       </main>
     </div>
   );
