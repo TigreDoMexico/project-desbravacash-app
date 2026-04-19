@@ -1,0 +1,9 @@
+services:
+  wiremock:
+    image: wiremock/wiremock:latest
+    ports:
+      - "5101:8080"
+    command: ["--enable-stub-cors"]
+    volumes:
+      - ./wiremock/mappings:/home/wiremock/mappings
+      - ./wiremock/__files:/home/wiremock/__files

@@ -14,3 +14,9 @@ Para iniciar o projeto localmente, basta executar o comando:
 npm install
 npm run dev
 ```
+
+## Como testar
+
+```bash
+npm run test
+```
