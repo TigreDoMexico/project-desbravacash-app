@@ -8,7 +8,7 @@ import { DadosDashboardResponse } from "./interfaces";
 import styles from "./dashboard.module.css";
 
 export default function DashboardPage() {
-  const { token, isAuthenticated, isLoading, logout } = useAuth();
+  const { token, role, isAuthenticated, isLoading, logout } = useAuth();
   const router = useRouter();
   const [dadosDashboard, setDadosDashboard] = useState<DadosDashboardResponse | null>(null);
   const [erro, setErro] = useState<string | null>(null);
@@ -56,6 +56,14 @@ export default function DashboardPage() {
             >
               Ver Extrato da Conta
             </button>
+            {role === "Admin" && (
+              <button
+                className={styles.extratoBtn}
+                onClick={() => router.push("/nova-transacao")}
+              >
+                Nova Transação
+              </button>
+            )}
           </>
         )}
       </main>
