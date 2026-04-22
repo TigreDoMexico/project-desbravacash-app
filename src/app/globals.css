@@ -9,10 +9,15 @@
   --red: #b41e1e;
   --gray: #c8c8c8;
   --white: #ffffff;
+
+  --roxo-moderno: #4F46E5;
+  --verde-base: #22C55E;
+  --branco-fundo-1: #F4F4FD;
+  --branco-fundo-2: #F8F8FE;
 }
 
 body {
-  background-color: var(--green);
-  color: var(--white);
+  background-color: var(--branco-fundo-1);
+  color: var(--verde-base);
   font-family: inherit;
 }

@@ -1,10 +1,27 @@
-.container {
-  min-height: 100vh;
+.logoWrapper {
   display: flex;
+  justify-content: space-around;
+  margin-bottom: 1.5rem;
+  min-height: 60px;
   align-items: center;
-  justify-content: center;
-  background-color: #144632;
-  padding: 1rem;
+}
+
+.placeholder {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #144632;
+  letter-spacing: -0.5px;
+}
+
+.highlight {
+  color: var(--verde-base);
+}
+
+.subplaceholder {
+  font-size: 1rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #144632;
 }
 
 .card {
@@ -12,31 +29,32 @@
   border-radius: 12px;
   padding: 2.5rem 2rem;
   width: 100%;
-  max-width: 400px;
+  max-width: 350px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
-.logoWrapper {
+.titleBox {
   display: flex;
-  justify-content: center;
-  margin-bottom: 1.5rem;
-  min-height: 60px;
+  justify-content: left;
   align-items: center;
+  margin-bottom: 0.5rem;
 }
 
-.logoPlaceholder {
-  font-size: 1.75rem;
-  font-weight: 800;
-  color: #144632;
-  letter-spacing: -0.5px;
+.titleIconBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.3rem;
+  background-color: #E2E1F5;
+  border-radius: 100%;
+  margin-right: 0.5rem;
 }
 
 .title {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  color: #144632;
+  color: #000000;
   text-align: center;
-  margin-bottom: 0.25rem;
 }
 
 .subtitle {
