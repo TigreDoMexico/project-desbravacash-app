@@ -6,9 +6,11 @@ import { useAuth } from "@/context/AuthContext";
 import { buscarUnidade } from "./service";
 import { DadosDashboardResponse } from "./interfaces";
 import styles from "./dashboard.module.css";
+import DashboardBackground from "@/components/layouts/DashboardBackgound/DashboardBackground";
+import DashboardCard from "@/components/layouts/DashboardCard/DashboardCard";
 
 export default function DashboardPage() {
-  const { token, role, isAuthenticated, isLoading, logout } = useAuth();
+  const { token, role, name, isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
   const [dadosDashboard, setDadosDashboard] = useState<DadosDashboardResponse | null>(null);
   const [erro, setErro] = useState<string | null>(null);
@@ -24,49 +26,38 @@ export default function DashboardPage() {
       .catch((e: Error) => setErro(e.message));
   }, [token]);
 
-  const handleLogout = () => {
-    logout();
-    router.replace("/login");
-  };
-
   if (isLoading || !isAuthenticated) return null;
 
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <span className={styles.brand}>DesbravaCash</span>
-        <button onClick={handleLogout} className={styles.logoutBtn}>
-          Sair
-        </button>
-      </header>
-      <main className={styles.main}>
-        {erro && <p className={styles.erro}>{erro}</p>}
-        {dadosDashboard && (
-          <>
-            <p className={styles.unidadeNome}>{dadosDashboard.unidade.nome}</p>
-            <div className={styles.saldoCard}>
-              <span className={styles.saldoLabel}>Saldo de Pontos</span>
-              <span className={styles.saldoValor}>
-                {dadosDashboard.saldo} pts
-              </span>
-            </div>
+    <DashboardBackground>
+      {erro && <p className={styles.erro}>{erro}</p>}
+      {dadosDashboard && (
+        <>
+          <DashboardCard className={styles.bemVindoCard}>
+            <span className={styles.bemVindoText}>Bem Vindo, {name}</span>
+            <p className={styles.unidadeNome}>Unidade {dadosDashboard.unidade.nome}</p>
+            <span className={styles.objetivoText}>Cada ação aproxima sua unidade para a vitória</span>
+          </DashboardCard>
+          <DashboardCard className={styles.balanceCard}>
+            <span className={styles.saldoLabel}>Saldo da Unidade</span>
+            <span className={styles.saldoValor}>{dadosDashboard.saldo} pts</span>
+          </DashboardCard>
+          <button
+            className={styles.extratoBtn}
+            onClick={() => router.push("/extrato")}
+          >
+            Ver Extrato da Conta
+          </button>
+          {role === "Admin" && (
             <button
               className={styles.extratoBtn}
-              onClick={() => router.push("/extrato")}
+              onClick={() => router.push("/nova-transacao")}
             >
-              Ver Extrato da Conta
+              Nova Transação
             </button>
-            {role === "Admin" && (
-              <button
-                className={styles.extratoBtn}
-                onClick={() => router.push("/nova-transacao")}
-              >
-                Nova Transação
-              </button>
-            )}
-          </>
-        )}
-      </main>
-    </div>
+          )}
+        </>
+      )}
+    </DashboardBackground>
   );
 }

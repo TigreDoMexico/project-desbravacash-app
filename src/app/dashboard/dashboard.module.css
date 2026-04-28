@@ -3,65 +3,38 @@
   background-color: #144632;
 }
 
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 2rem;
-  background-color: rgba(0, 0, 0, 0.2);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+.bemVindoCard {
+  margin-bottom: 1rem;
+  background-color: #144632;
 }
 
-.brand {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #ffffff;
-}
-
-.logoutBtn {
-  padding: 0.5rem 1.25rem;
-  background-color: #b41e1e;
-  color: #ffffff;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.logoutBtn:hover {
-  opacity: 0.85;
-}
-
-.main {
-  padding: 3rem 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
+.bemVindoText {
+  font-size: 1rem;
 }
 
 .unidadeNome {
   font-size: 1.5rem;
   font-weight: 700;
   color: #ffffff;
+  margin-bottom: 0.8rem;
 }
 
-.saldoCard {
+.objetivoText {
+  font-size: 0.7rem;
+  color: var(--white);
+}
+
+.balanceCard {
+  background-color: var(--vermelho-vivo);
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 0.5rem;
-  background-color: rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
   padding: 2rem 3rem;
 }
 
 .saldoLabel {
   font-size: 0.9rem;
-  color: #c8c8c8;
+  color: var(--white);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }

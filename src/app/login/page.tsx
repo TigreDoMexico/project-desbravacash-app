@@ -11,6 +11,7 @@ import { Phone, User, Lock, Trophy, BarChart2 } from "lucide-react";
 import Input from "@/components/ui/Input/Input";
 import Button from "@/components/ui/Button/Button";
 import LoginFooterCard from "@/components/layouts/LoginFooterCard/LoginFooterCard";
+import TitleLabel from "@/components/ui/TitleLabel/TitleLabel";
 
 export default function LoginPage() {
   const [telefone, setTelefone] = useState("");
@@ -43,7 +44,7 @@ export default function LoginPage() {
   return (
     <LoginBackground>
       <Image src="/clube_logo.png" alt="DesbravaCash" width={120} height={150} />
-      <span className={styles.placeholder}>DESBRAVA<span className={styles.highlight}>CASH</span></span>
+      <TitleLabel />
       <span className={styles.subplaceholder}>Seu banco de pontos de unidades</span>
 
       <div className={styles.card}>
