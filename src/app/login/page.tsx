@@ -7,7 +7,10 @@ import { useAuth } from "@/context/AuthContext";
 import styles from "./login.module.css";
 import { RealizarLogin } from "./service";
 import LoginBackground from "@/components/layouts/LoginBackground/LoginBackground";
-import { User } from "lucide-react";
+import { Phone, User, Lock, Trophy, BarChart2 } from "lucide-react";
+import Input from "@/components/ui/Input/Input";
+import Button from "@/components/ui/Button/Button";
+import LoginFooterCard from "@/components/layouts/LoginFooterCard/LoginFooterCard";
 
 export default function LoginPage() {
   const [telefone, setTelefone] = useState("");
@@ -44,47 +47,60 @@ export default function LoginPage() {
       <span className={styles.subplaceholder}>Seu banco de pontos de unidades</span>
 
       <div className={styles.card}>
-          <div className={styles.titleBox}>
-            <div className={styles.titleIconBox}>
-              <User size={30} color="#4F46E5" />
-            </div>
-            <h1 className={styles.title}>Entrar na sua conta</h1>
+        <div className={styles.titleBox}>
+          <div className={styles.titleIconBox}>
+            <User size={30} color="#4F46E5" />
           </div>
-
-          <form onSubmit={handleSubmit} className={styles.form}>
-            <div className={styles.field}>
-              <label htmlFor="telefone">Telefone</label>
-              <input
-                id="telefone"
-                type="tel"
-                value={telefone}
-                onChange={(e) => setTelefone(e.target.value)}
-                placeholder="11XXXXXXXX"
-                required
-                autoComplete="tel"
-              />
-            </div>
-
-            <div className={styles.field}>
-              <label htmlFor="password">Senha</label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                autoComplete="current-password"
-              />
-            </div>
-
-            {error && <p className={styles.error}>{error}</p>}
-
-            <button type="submit" className={styles.button} disabled={loading}>
-              {loading ? "Entrando..." : "Entrar"}
-            </button>
-          </form>
+          <h1 className={styles.title}>Entrar na sua conta</h1>
         </div>
+
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <Input
+            label="Telefone"
+            id="telefone"
+            type="tel"
+            value={telefone}
+            onChange={(e) => setTelefone(e.target.value)}
+            placeholder="Seu telefone (11.....)"
+            required
+            autoComplete="tel"
+            icon={<Phone size={16} />}
+          />
+
+          <Input
+            label="Senha"
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Sua senha
+              "
+            required
+            autoComplete="current-password"
+            icon={<Lock size={16} />}
+          />
+
+          {error && <p className={styles.error}>{error}</p>}
+
+          <Button type="submit" loading={loading}>Entrar</Button>
+        </form>
+      </div>
+
+      <div className={styles.footer}>
+        <LoginFooterCard
+          icon={<Trophy size={20} />}
+          title="Conquistas"
+          description="Acompanhe seus pontos"
+          color="#FCBF38"
+        />
+        <LoginFooterCard
+          icon={<BarChart2 size={20} />}
+          title="Ranking"
+          description="Veja sua posição"
+          color="#3A9465"
+        />
+      </div>
+      <span className={styles.copyright}>&copy; 2026 DesbravaCash. Todos os Direitos Reservados</span>
     </LoginBackground>
   );
 }
