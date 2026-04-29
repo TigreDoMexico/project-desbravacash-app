@@ -6,6 +6,8 @@ import { useAuth } from "@/context/AuthContext";
 import { buscarExtrato } from "./service";
 import { Transacao } from "./interfaces";
 import styles from "./extrato.module.css";
+import DashboardBackground from "@/components/layouts/DashboardBackgound/DashboardBackground";
+import TransacaoCard from "@/components/layouts/TransacaoCard/TransacaoCard";
 
 export default function ExtratoPage() {
   const { token, isAuthenticated, isLoading } = useAuth();
@@ -27,36 +29,16 @@ export default function ExtratoPage() {
   if (isLoading || !isAuthenticated) return null;
 
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <span className={styles.brand}>DesbravaCash</span>
-        <button onClick={() => router.back()} className={styles.backBtn}>
-          Voltar
-        </button>
-      </header>
-      <main className={styles.main}>
-        <p className={styles.titulo}>Extrato da Unidade</p>
-        {erro && <p className={styles.erro}>{erro}</p>}
-        {!erro && transacoes.length === 0 && (
-          <p className={styles.vazio}>Nenhuma transação encontrada.</p>
-        )}
-        <div className={styles.lista}>
-          {transacoes.map((t) => (
-            <div key={t.id} className={styles.item}>
-              <div className={styles.info}>
-                <span className={styles.descricao}>{t.descricao}</span>
-                <span className={styles.meta}>{t.mes}</span>
-              </div>
-              <div className={styles.direita}>
-                <span className={`${styles.valor} ${styles[t.tipo]}`}>
-                  {t.tipo === "debito" ? "-" : "+"} {t.valor}
-                </span>
-                <span className={styles.status}>{t.status}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </main>
-    </div>
+    <DashboardBackground showGreeting={false} title="Extrato da Unidade" onBack={() => router.back()}>
+      {erro && <p className={styles.erro}>{erro}</p>}
+      {!erro && transacoes.length === 0 && (
+        <p className={styles.vazio}>Nenhuma transação encontrada.</p>
+      )}
+      <div className={styles.lista}>
+        {transacoes.map((t) => (
+          <TransacaoCard key={t.id} transacao={t} />
+        ))}
+      </div>
+    </DashboardBackground>
   );
 }

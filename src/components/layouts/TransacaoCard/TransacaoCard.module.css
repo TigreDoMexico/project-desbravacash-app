@@ -1,0 +1,52 @@
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--white);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.descricao {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #144632;
+}
+
+.meta {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.direita {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.valor {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.credito {
+  color: #3A9465;
+}
+
+.debito {
+  color: #b41e1e;
+}
+
+.status {
+  font-size: 0.75rem;
+  color: #888;
+  text-transform: capitalize;
+}

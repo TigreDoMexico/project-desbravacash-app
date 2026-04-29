@@ -8,12 +8,16 @@ import { DadosDashboardResponse } from "./interfaces";
 import styles from "./dashboard.module.css";
 import DashboardBackground from "@/components/layouts/DashboardBackgound/DashboardBackground";
 import DashboardCard from "@/components/layouts/DashboardCard/DashboardCard";
+import { FileText, Plus, Star, ClipboardCheck } from "lucide-react";
+import QuickActionButton from "@/components/ui/QuickActionButton/QuickActionButton";
 
 export default function DashboardPage() {
   const { token, role, name, isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
   const [dadosDashboard, setDadosDashboard] = useState<DadosDashboardResponse | null>(null);
   const [erro, setErro] = useState<string | null>(null);
+  const isAdmin = role === "Admin";
+  const isTesoureiro = role === "Tesoureiro";
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) router.replace("/login");
@@ -39,23 +43,36 @@ export default function DashboardPage() {
             <span className={styles.objetivoText}>Cada ação aproxima sua unidade para a vitória</span>
           </DashboardCard>
           <DashboardCard className={styles.balanceCard}>
-            <span className={styles.saldoLabel}>Saldo da Unidade</span>
-            <span className={styles.saldoValor}>{dadosDashboard.saldo} pts</span>
+            <Star size={40} color="#FCBF38" fill="#FCBF38" />
+            <div className={styles.balanceInfo}>
+              <span className={styles.saldoLabel}>Saldo da Unidade</span>
+              <span className={styles.saldoValor}>{dadosDashboard.saldo} pts</span>
+            </div>
           </DashboardCard>
-          <button
-            className={styles.extratoBtn}
-            onClick={() => router.push("/extrato")}
-          >
-            Ver Extrato da Conta
-          </button>
-          {role === "Admin" && (
-            <button
-              className={styles.extratoBtn}
-              onClick={() => router.push("/nova-transacao")}
-            >
-              Nova Transação
-            </button>
-          )}
+          <DashboardCard className={styles.quickActionsCard}>
+            <span>Ações Rápidas</span>
+            <div className={styles.quickActionsRow}>
+              <QuickActionButton
+                icon={<FileText size={22} />}
+                label="Ver Extrato"
+                onClick={() => router.push("/extrato")}
+              />
+              {(isAdmin || isTesoureiro)  && (
+                <QuickActionButton
+                  icon={<Plus size={22} />}
+                  label="Nova Transação"
+                  onClick={() => router.push("/nova-transacao")}
+                />
+              )}
+              {isAdmin && (
+                <QuickActionButton
+                  icon={<ClipboardCheck size={22} />}
+                  label="Aprovar Transações"
+                  onClick={() => router.push("/aprovacoes")}
+                />
+              )}
+            </div>
+          </DashboardCard>
         </>
       )}
     </DashboardBackground>

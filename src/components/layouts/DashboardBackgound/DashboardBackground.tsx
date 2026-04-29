@@ -3,11 +3,18 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { LogOut } from "lucide-react";
+import { LogOut, ChevronLeft } from "lucide-react";
 import styles from "./DashboardBackground.module.css";
 import TitleLabel from "@/components/ui/TitleLabel/TitleLabel";
 
-export default function DashboardBackground({ children }: { children: React.ReactNode }) {
+interface DashboardBackgroundProps {
+  children: React.ReactNode;
+  showGreeting?: boolean;
+  title?: string;
+  onBack?: () => void;
+}
+
+export default function DashboardBackground({ children, showGreeting = true, title, onBack }: DashboardBackgroundProps) {
   const { name, logout } = useAuth();
   const router = useRouter();
 
@@ -24,7 +31,7 @@ export default function DashboardBackground({ children }: { children: React.Reac
           <TitleLabel fontSize="0.9rem"/>
         </div>
         <div className={styles.actions}>
-          <span className={styles.greeting}>Olá, {name ?? "usuário"}</span>
+          {showGreeting && <span className={styles.greeting}>Olá, {name ?? "usuário"}</span>}
           <button className={styles.logoutBtn} onClick={handleLogout}>
             <LogOut size={16} />
             Sair
@@ -32,6 +39,17 @@ export default function DashboardBackground({ children }: { children: React.Reac
         </div>
       </header>
       <main className={styles.content}>
+        {(onBack || title) && (
+          <div className={styles.pageHeader}>
+            {onBack && (
+              <button className={styles.backBtn} onClick={onBack}>
+                <ChevronLeft size={18} />
+                Voltar
+              </button>
+            )}
+            {title && <h1 className={styles.pageTitle}>{title}</h1>}
+          </div>
+        )}
         {children}
       </main>
     </div>
