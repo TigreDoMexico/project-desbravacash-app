@@ -19,9 +19,15 @@
   pointer-events: none;
 }
 
+.label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #144632;
+}
+
 .field input {
   width: 100%;
-  padding: 0.75rem 2.3rem;
+  padding: 0.75rem 1rem;
   border: 1.5px solid var(--gray);
   border-radius: 8px;
   font-size: 0.95rem;
@@ -31,7 +37,7 @@
 }
 
 .withIcon {
-  padding-left: 2.5rem;
+  padding-left: 2.5rem !important;
 }
 
 .field input:focus {

@@ -57,7 +57,6 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <Input
-            label="Telefone"
             id="telefone"
             type="tel"
             value={telefone}
@@ -69,7 +68,6 @@ export default function LoginPage() {
           />
 
           <Input
-            label="Senha"
             id="password"
             type="password"
             value={password}

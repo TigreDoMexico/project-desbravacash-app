@@ -8,21 +8,33 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
+.data {
+  border-right: 1px solid var(--gray);
+  padding-right: 1rem;
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.data > span {
+  font-size: 0.75rem;
+  color: var(--vermelho-vivo);
+  text-transform: uppercase;
+}
+
 .info {
   display: flex;
   flex-direction: column;
+  justify-content: start;
+  align-items: flex-start;
   gap: 0.25rem;
+  flex: 1;
+  padding-left: 1rem;
 }
 
 .descricao {
   font-size: 0.95rem;
   font-weight: 600;
   color: #144632;
-}
-
-.meta {
-  font-size: 0.8rem;
-  color: #888;
 }
 
 .direita {

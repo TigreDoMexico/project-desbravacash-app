@@ -11,5 +11,5 @@ export interface NovaTransacaoPayload {
   unidadeId: string;
   valor: string;
   descricao: string;
-  tipo: string;
+  tipoTransacao: string;
 }

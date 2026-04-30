@@ -6,6 +6,9 @@ import { useAuth } from "@/context/AuthContext";
 import { buscarUnidades, criarTransacao } from "./service";
 import { Unidade } from "./interfaces";
 import styles from "./nova-transacao.module.css";
+import DashboardBackground from "@/components/layouts/DashboardBackgound/DashboardBackground";
+import Input from "@/components/ui/Input/Input";
+import Button from "@/components/ui/Button/Button";
 
 export default function NovaTransacaoPage() {
   const { token, role, isAuthenticated, isLoading } = useAuth();
@@ -43,7 +46,7 @@ export default function NovaTransacaoPage() {
     setSucesso(false);
     setEnviando(true);
     try {
-      await criarTransacao(token, { unidadeId, valor, descricao, tipo });
+      await criarTransacao(token, { unidadeId, valor, descricao, tipoTransacao: tipo });
       setSucesso(true);
       setValor("");
       setDescricao("");
@@ -58,72 +61,55 @@ export default function NovaTransacaoPage() {
   if (isLoading || !isAuthenticated || role !== "Admin") return null;
 
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <span className={styles.brand}>DesbravaCash</span>
-        <button onClick={() => router.back()} className={styles.backBtn}>
-          Voltar
-        </button>
-      </header>
-      <main className={styles.main}>
-        <p className={styles.titulo}>Nova Transação</p>
+    <DashboardBackground showGreeting={false} title="Nova Transação" onBack={() => router.back()}>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <div className={styles.field}>
+          <label className={styles.label}>Unidade</label>
+          <select
+            className={styles.select}
+            value={unidadeId}
+            onChange={(e) => setUnidadeId(e.target.value)}
+            required
+          >
+            {unidades.map((u) => (
+              <option key={u.id} value={u.id}>{u.nome}</option>
+            ))}
+          </select>
+        </div>
+        <Input
+          label="Valor"
+          id="valor"
+          type="number"
+          placeholder="Ex: 150"
+          value={valor}
+          onChange={(e) => setValor(e.target.value)}
+          required
+        />
+        <Input
+          label="Descrição"
+          id="descricao"
+          type="text"
+          placeholder="Ex: Premiação mensal"
+          value={descricao}
+          onChange={(e) => setDescricao(e.target.value)}
+          required
+        />
+        <div className={styles.field}>
+          <label className={styles.label}>Tipo</label>
+          <select
+            className={styles.select}
+            value={tipo}
+            onChange={(e) => setTipo(e.target.value)}
+            required
+          >
+            <option value="credito">Adicionar Valor</option>
+            <option value="debito">Remover Valor</option>
+          </select>
+        </div>
         {erro && <p className={styles.erro}>{erro}</p>}
         {sucesso && <p className={styles.sucesso}>Transação criada com sucesso!</p>}
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <div className={styles.field}>
-            <label className={styles.label}>Unidade</label>
-            <select
-              className={styles.select}
-              value={unidadeId}
-              onChange={(e) => setUnidadeId(e.target.value)}
-              required
-            >
-              {unidades.map((u) => (
-                <option key={u.id} value={u.id}>
-                  {u.nome}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className={styles.field}>
-            <label className={styles.label}>Valor</label>
-            <input
-              className={styles.input}
-              type="text"
-              placeholder="Ex: 150"
-              value={valor}
-              onChange={(e) => setValor(e.target.value)}
-              required
-            />
-          </div>
-          <div className={styles.field}>
-            <label className={styles.label}>Descrição</label>
-            <input
-              className={styles.input}
-              type="text"
-              placeholder="Ex: Premiação mensal"
-              value={descricao}
-              onChange={(e) => setDescricao(e.target.value)}
-              required
-            />
-          </div>
-          <div className={styles.field}>
-            <label className={styles.label}>Tipo</label>
-            <select
-              className={styles.select}
-              value={tipo}
-              onChange={(e) => setTipo(e.target.value)}
-              required
-            >
-              <option value="credito">Crédito</option>
-              <option value="debito">Débito</option>
-            </select>
-          </div>
-          <button type="submit" className={styles.submitBtn} disabled={enviando}>
-            {enviando ? "Enviando..." : "Criar Transação"}
-          </button>
-        </form>
-      </main>
-    </div>
+        <Button type="submit" loading={enviando}>Criar Transação</Button>
+      </form>
+    </DashboardBackground>
   );
 }
