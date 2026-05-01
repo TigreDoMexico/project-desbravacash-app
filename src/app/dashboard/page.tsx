@@ -6,12 +6,18 @@ import { useAuth } from "@/context/AuthContext";
 import { buscarUnidade } from "./service";
 import { DadosDashboardResponse } from "./interfaces";
 import styles from "./dashboard.module.css";
+import DashboardBackground from "@/components/layouts/DashboardBackgound/DashboardBackground";
+import DashboardCard from "@/components/layouts/DashboardCard/DashboardCard";
+import { FileText, Plus, Star, ClipboardCheck } from "lucide-react";
+import QuickActionButton from "@/components/ui/QuickActionButton/QuickActionButton";
 
 export default function DashboardPage() {
-  const { token, isAuthenticated, isLoading, logout } = useAuth();
+  const { token, role, name, isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
   const [dadosDashboard, setDadosDashboard] = useState<DadosDashboardResponse | null>(null);
   const [erro, setErro] = useState<string | null>(null);
+  const isAdmin = role === "Admin";
+  const isTesoureiro = role === "Tesoureiro";
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) router.replace("/login");
@@ -24,41 +30,51 @@ export default function DashboardPage() {
       .catch((e: Error) => setErro(e.message));
   }, [token]);
 
-  const handleLogout = () => {
-    logout();
-    router.replace("/login");
-  };
-
   if (isLoading || !isAuthenticated) return null;
 
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <span className={styles.brand}>DesbravaCash</span>
-        <button onClick={handleLogout} className={styles.logoutBtn}>
-          Sair
-        </button>
-      </header>
-      <main className={styles.main}>
-        {erro && <p className={styles.erro}>{erro}</p>}
-        {dadosDashboard && (
-          <>
-            <p className={styles.unidadeNome}>{dadosDashboard.unidade.nome}</p>
-            <div className={styles.saldoCard}>
-              <span className={styles.saldoLabel}>Saldo de Pontos</span>
-              <span className={styles.saldoValor}>
-                {dadosDashboard.saldo} pts
-              </span>
+    <DashboardBackground>
+      {erro && <p className={styles.erro}>{erro}</p>}
+      {dadosDashboard && (
+        <>
+          <DashboardCard className={styles.bemVindoCard}>
+            <span className={styles.bemVindoText}>Bem Vindo, {name}</span>
+            <p className={styles.unidadeNome}>Unidade {dadosDashboard.unidade.nome}</p>
+            <span className={styles.objetivoText}>Cada ação aproxima sua unidade para a vitória</span>
+          </DashboardCard>
+          <DashboardCard className={styles.balanceCard}>
+            <Star size={40} color="#FCBF38" fill="#FCBF38" />
+            <div className={styles.balanceInfo}>
+              <span className={styles.saldoLabel}>Saldo da Unidade</span>
+              <span className={styles.saldoValor}>{dadosDashboard.saldo} pts</span>
             </div>
-            <button
-              className={styles.extratoBtn}
-              onClick={() => router.push("/extrato")}
-            >
-              Ver Extrato da Conta
-            </button>
-          </>
-        )}
-      </main>
-    </div>
+          </DashboardCard>
+          <DashboardCard className={styles.quickActionsCard}>
+            <span>Ações Rápidas</span>
+            <div className={styles.quickActionsRow}>
+              <QuickActionButton
+                icon={<FileText size={22} />}
+                label="Ver Extrato"
+                onClick={() => router.push("/extrato")}
+              />
+              {(isAdmin || isTesoureiro)  && (
+                <QuickActionButton
+                  icon={<Plus size={22} />}
+                  label="Nova Transação"
+                  onClick={() => router.push("/nova-transacao")}
+                />
+              )}
+              {isAdmin && (
+                <QuickActionButton
+                  icon={<ClipboardCheck size={22} />}
+                  label="Aprovar Transações"
+                  onClick={() => router.push("/aprovacoes")}
+                />
+              )}
+            </div>
+          </DashboardCard>
+        </>
+      )}
+    </DashboardBackground>
   );
 }

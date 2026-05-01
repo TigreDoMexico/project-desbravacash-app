@@ -1,0 +1,83 @@
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--white);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  gap: 1rem;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.descricao {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #144632;
+}
+
+.meta {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.valor {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.credito { color: #3A9465; }
+.debito  { color: #b41e1e; }
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.aprovar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.4rem 0.75rem;
+  background-color: #3A9465;
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.reprovar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.4rem 0.75rem;
+  background-color: #b41e1e;
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.aprovar:hover,
+.reprovar:hover {
+  opacity: 0.85;
+}
+
+.aprovar:disabled,
+.reprovar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

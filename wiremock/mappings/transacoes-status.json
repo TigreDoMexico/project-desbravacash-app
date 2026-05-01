@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "PUT",
+    "urlPathPattern": "/api/transacoes/[^/]+/status"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

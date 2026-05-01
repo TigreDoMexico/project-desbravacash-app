@@ -6,6 +6,12 @@ import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
 import styles from "./login.module.css";
 import { RealizarLogin } from "./service";
+import LoginBackground from "@/components/layouts/LoginBackground/LoginBackground";
+import { Phone, User, Lock, Trophy, BarChart2 } from "lucide-react";
+import Input from "@/components/ui/Input/Input";
+import Button from "@/components/ui/Button/Button";
+import LoginFooterCard from "@/components/layouts/LoginFooterCard/LoginFooterCard";
+import TitleLabel from "@/components/ui/TitleLabel/TitleLabel";
 
 export default function LoginPage() {
   const [telefone, setTelefone] = useState("");
@@ -36,51 +42,65 @@ export default function LoginPage() {
   };
 
   return (
-    <div className={styles.container}>
+    <LoginBackground>
+      <Image src="/clube_logo.png" alt="DesbravaCash" width={120} height={150} />
+      <TitleLabel />
+      <span className={styles.subplaceholder}>Seu banco de pontos de unidades</span>
+
       <div className={styles.card}>
-        {/* Espaço para o logo PNG */}
-        <div className={styles.logoWrapper}>
-          {/* Substitua pelo seu logo: <Image src="/logo.png" alt="DesbravaCash" width={180} height={60} /> */}
-          <span className={styles.logoPlaceholder}>DesbravaCash</span>
+        <div className={styles.titleBox}>
+          <div className={styles.titleIconBox}>
+            <User size={30} color="#4F46E5" />
+          </div>
+          <h1 className={styles.title}>Entrar na sua conta</h1>
         </div>
 
-        <h1 className={styles.title}>Bem-vindo</h1>
-        <p className={styles.subtitle}>Acesse sua conta</p>
-
         <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.field}>
-            <label htmlFor="telefone">Telefone</label>
-            <input
-              id="telefone"
-              type="tel"
-              value={telefone}
-              onChange={(e) => setTelefone(e.target.value)}
-              placeholder="11XXXXXXXX"
-              required
-              autoComplete="tel"
-            />
-          </div>
+          <Input
+            id="telefone"
+            label="Telefone"
+            type="tel"
+            value={telefone}
+            onChange={(e) => setTelefone(e.target.value)}
+            placeholder="Seu telefone (11.....) "
+            required
+            autoComplete="tel"
+            icon={<Phone size={16} />}
+          />
 
-          <div className={styles.field}>
-            <label htmlFor="password">Senha</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-              autoComplete="current-password"
-            />
-          </div>
+          <Input
+            id="password"
+            label="Senha"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Sua senha"
+            required
+            autoComplete="current-password"
+            icon={<Lock size={16} />}
+          />
 
           {error && <p className={styles.error}>{error}</p>}
 
-          <button type="submit" className={styles.button} disabled={loading}>
-            {loading ? "Entrando..." : "Entrar"}
-          </button>
+          <Button type="submit" loading={loading}>Entrar</Button>
         </form>
       </div>
-    </div>
+
+      <div className={styles.footer}>
+        <LoginFooterCard
+          icon={<Trophy size={20} />}
+          title="Conquistas"
+          description="Acompanhe seus pontos"
+          color="#FCBF38"
+        />
+        <LoginFooterCard
+          icon={<BarChart2 size={20} />}
+          title="Ranking"
+          description="Veja sua posição"
+          color="#3A9465"
+        />
+      </div>
+      <span className={styles.copyright}>&copy; 2026 DesbravaCash. Todos os Direitos Reservados</span>
+    </LoginBackground>
   );
 }

@@ -1,0 +1,34 @@
+.card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e2e1f5;
+  border-radius: 50%;
+  padding: 0.5rem;
+  color: var(--roxo-moderno);
+  flex-shrink: 0;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--dark-gray);
+}
+
+.description {
+  font-size: 0.8rem;
+  color: var(--dark-gray);
+}
