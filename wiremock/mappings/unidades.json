@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/unidades"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "unidades": [
+        { "id": "1", "nome": "Unidade Norte" },
+        { "id": "2", "nome": "Unidade Sul" },
+        { "id": "3", "nome": "Unidade Centro" }
+      ]
+    }
+  }
+}

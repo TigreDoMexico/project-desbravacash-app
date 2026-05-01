@@ -1,0 +1,21 @@
+.button {
+  padding: 0.85rem;
+  background-color: var(--roxo-moderno);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, opacity 0.2s;
+  width: 100%;
+}
+
+.button:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

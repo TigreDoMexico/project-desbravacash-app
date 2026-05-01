@@ -1,0 +1,94 @@
+.container {
+  min-height: 100vh;
+  background-color: #144632;
+}
+
+.bemVindoCard {
+  margin-bottom: 1rem;
+  background-color: #144632;
+}
+
+.bemVindoText {
+  font-size: 1rem;
+}
+
+.unidadeNome {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.8rem;
+}
+
+.objetivoText {
+  font-size: 0.7rem;  
+}
+
+.balanceCard {
+  background-color: var(--vermelho-vivo);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 2rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.balanceInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.saldoLabel {
+  font-size: 0.9rem;
+  color: var(--white);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.saldoValor {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.extratoBtn {
+  padding: 0.75rem 2rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.extratoBtn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.erro {
+  color: #f87171;
+  font-size: 0.95rem;
+}
+
+.quickActionsCard {
+  background-color: #144632;
+}
+
+.quickActionsCard > span {
+  color: var(--white);
+}
+
+.quickActionsRow {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.quickActionsRow > * {
+  flex: 1;
+}

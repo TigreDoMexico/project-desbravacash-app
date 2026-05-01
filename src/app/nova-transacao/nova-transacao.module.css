@@ -1,0 +1,51 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 480px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #144632;
+}
+
+.select {
+  padding: 0.75rem 1rem;
+  border: 1.5px solid #c8c8c8;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #333;
+  outline: none;
+  transition: border-color 0.2s;
+  background-color: #ffffff;
+}
+
+.select:focus {
+  border-color: #144632;
+}
+
+.erro {
+  font-size: 0.85rem;
+  color: #b41e1e;
+  padding: 0.5rem;
+  background-color: #fdf0f0;
+  border-radius: 6px;
+  border: 1px solid #b41e1e33;
+}
+
+.sucesso {
+  font-size: 0.85rem;
+  color: #3A9465;
+  padding: 0.5rem;
+  background-color: #f0fdf4;
+  border-radius: 6px;
+  border: 1px solid #3A946533;
+}
