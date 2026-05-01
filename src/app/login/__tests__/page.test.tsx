@@ -94,7 +94,7 @@ describe("LoginPage", () => {
     await userEvent.type(screen.getByLabelText("Senha"), "senha123");
     await userEvent.click(screen.getByRole("button", { name: "Entrar" }));
 
-    expect(screen.getByRole("button", { name: "Entrando..." })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Carregando..." })).toBeDisabled();
   });
 
   it("redireciona para o dashboard se o usuário já estiver autenticado", () => {

@@ -58,10 +58,11 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className={styles.form}>
           <Input
             id="telefone"
+            label="Telefone"
             type="tel"
             value={telefone}
             onChange={(e) => setTelefone(e.target.value)}
-            placeholder="Seu telefone (11.....)"
+            placeholder="Seu telefone (11.....) "
             required
             autoComplete="tel"
             icon={<Phone size={16} />}
@@ -69,11 +70,11 @@ export default function LoginPage() {
 
           <Input
             id="password"
+            label="Senha"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Sua senha
-              "
+            placeholder="Sua senha"
             required
             autoComplete="current-password"
             icon={<Lock size={16} />}

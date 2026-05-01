@@ -20,14 +20,26 @@ jest.mock("@/context/AuthContext", () => ({
     logout: mockLogout,
     isAuthenticated: mockIsAuthenticated,
     isLoading: mockIsLoading,
+    name: "Usuário Teste",
+    role: "Membro",
   }),
+}));
+
+jest.mock("next/image", () => ({
+  __esModule: true,
+  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => <img {...props} />,
+}));
+
+jest.mock("@/components/ui/TitleLabel/TitleLabel", () => ({
+  __esModule: true,
+  default: () => <span>DesbravaCash</span>,
 }));
 
 jest.mock("../service");
 const mockBuscarUnidade = service.buscarUnidade as jest.MockedFunction<typeof service.buscarUnidade>;
 
 const dadosMock = {
-  unidade: { nome: "Unidade Desbravadores Central" },
+  unidade: { nome: "Desbravadores Central" },
   saldo: "4.750",
 };
 
@@ -54,7 +66,7 @@ describe("DashboardPage", () => {
     render(<DashboardPage />);
 
     await waitFor(() => {
-      expect(screen.getByRole("button", { name: "Ver Extrato da Conta" })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "Ver Extrato" })).toBeInTheDocument();
     });
   });
 
@@ -62,7 +74,7 @@ describe("DashboardPage", () => {
     mockBuscarUnidade.mockResolvedValue(dadosMock);
     render(<DashboardPage />);
 
-    await userEvent.click(await screen.findByRole("button", { name: "Ver Extrato da Conta" }));
+    await userEvent.click(await screen.findByRole("button", { name: "Ver Extrato" }));
 
     expect(mockPush).toHaveBeenCalledWith("/extrato");
   });
