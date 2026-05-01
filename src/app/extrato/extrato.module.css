@@ -35,6 +35,12 @@
   color: #ffffff;
 }
 
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  width: 100%;
+}
+
 .lista {
   display: flex;
   flex-direction: column;

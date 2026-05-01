@@ -20,12 +20,14 @@ export default function AprovacaoCard({ transacao, onAprovar, onReprovar }: Apro
 
   return (
     <div className={styles.item}>
-      <div className={styles.info}>
-        <span className={styles.descricao}>{transacao.descricao}</span>
-        <span className={styles.meta}>{transacao.mes}</span>
+      <div>
         <span className={`${styles.valor} ${isDebito ? styles.debito : styles.credito}`}>
           {isDebito ? "-" : "+"} {transacao.valor}
         </span>
+      </div>
+      <div className={styles.info}>
+        <span className={styles.descricao}>Unidade {transacao.nomeUnidade}: {transacao.descricao}</span>
+        <span className={styles.meta}>{transacao.mes}</span>
       </div>
       <div className={styles.actions}>
         <button className={styles.aprovar} disabled={loading} onClick={() => handle(() => onAprovar(transacao.id))}>
