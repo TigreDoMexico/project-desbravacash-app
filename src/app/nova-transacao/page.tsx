@@ -25,19 +25,28 @@ export default function NovaTransacaoPage() {
 
   useEffect(() => {
     if (isLoading) return;
-    if (!isAuthenticated) router.replace("/login");
-    else if (role !== "Admin") router.replace("/dashboard");
-  }, [isAuthenticated, isLoading, role, router]);
 
-  useEffect(() => {
+    if (!isAuthenticated) {
+      router.replace("/login");
+      return;
+    }
+
+    if (role !== "Admin") {
+      router.replace("/dashboard");
+      return;
+    }
+
     if (!token) return;
+
     buscarUnidades(token)
       .then((data) => {
         setUnidades(data.unidades);
-        if (data.unidades.length > 0) setUnidadeId(data.unidades[0].id);
+        if (data.unidades.length > 0) {
+          setUnidadeId(data.unidades[0].id);
+        }
       })
       .catch((e: Error) => setErro(e.message));
-  }, [token]);
+  }, [isAuthenticated, isLoading, role, token, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -17,16 +17,25 @@ export default function AprovacoesPage() {
 
   useEffect(() => {
     if (isLoading) return;
-    if (!isAuthenticated) router.replace("/login");
-    else if (role !== "Admin") router.replace("/dashboard");
-  }, [isAuthenticated, isLoading, role, router]);
 
-  useEffect(() => {
+    if (!isAuthenticated) {
+      router.replace("/login");
+      return;
+    }
+
+    if (role !== "Admin") {
+      router.replace("/dashboard");
+      return;
+    }
+
     if (!token) return;
+
     buscarPendentes(token)
-      .then((data) => setTransacoes(data.transacoes))
+      .then((data) => {
+        setTransacoes(data.transacoes);
+      })
       .catch((e: Error) => setErro(e.message));
-  }, [token]);
+  }, [isAuthenticated, isLoading, role, token, router]);
 
   const remover = (id: string) => setTransacoes((prev) => prev.filter((t) => t.id !== id));
 
