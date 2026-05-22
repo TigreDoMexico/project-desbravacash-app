@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/solicitacoes"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": [
+      {
+        "id": "00000000-0000-0000-0000-000000000001",
+        "tipo": "Manual",
+        "status": "Solicitado",
+        "valor": 100,
+        "descricao": "Descrição da solicitação",
+        "criadoEm": "2025-01-01T00:00:00Z",
+        "unidadeId": "00000000-0000-0000-0000-000000000010",
+        "nomeUnidade": "Unidade Norte",
+        "nomeDesafio": null
+      },
+      {
+        "id": "00000000-0000-0000-0000-000000000002",
+        "tipo": "Desafio",
+        "status": "Aprovado",
+        "valor": 50,
+        "descricao": "Completou desafio de leitura",
+        "criadoEm": "2025-02-01T00:00:00Z",
+        "unidadeId": "00000000-0000-0000-0000-000000000011",
+        "nomeUnidade": "Unidade Sul",
+        "nomeDesafio": "Desafio de Leitura"
+      }
+    ]
+  }
+}

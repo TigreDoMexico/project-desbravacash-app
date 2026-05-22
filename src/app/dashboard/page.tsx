@@ -8,7 +8,7 @@ import { DadosDashboardResponse } from "./interfaces";
 import styles from "./dashboard.module.css";
 import DashboardBackground from "@/components/layouts/DashboardBackgound/DashboardBackground";
 import DashboardCard from "@/components/layouts/DashboardCard/DashboardCard";
-import { FileText, Plus, Star, ClipboardCheck } from "lucide-react";
+import { FileText, Plus, Star, ClipboardCheck, Trophy } from "lucide-react";
 import QuickActionButton from "@/components/ui/QuickActionButton/QuickActionButton";
 
 export default function DashboardPage() {
@@ -18,6 +18,7 @@ export default function DashboardPage() {
   const [erro, setErro] = useState<string | null>(null);
   const isAdmin = role === "Admin";
   const isTesoureiro = role === "Tesoureiro";
+  const isConselheiro = role === "Conselheiro";
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) router.replace("/login");
@@ -69,6 +70,13 @@ export default function DashboardPage() {
                   icon={<ClipboardCheck size={22} />}
                   label="Aprovar Transações"
                   onClick={() => router.push("/aprovacoes")}
+                />
+              )}
+              {isConselheiro && (
+                <QuickActionButton
+                  icon={<Trophy size={22} />}
+                  label="Desafios"
+                  onClick={() => router.push("/desafios")}
                 />
               )}
             </div>

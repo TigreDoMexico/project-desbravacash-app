@@ -1,0 +1,15 @@
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.erro {
+  color: #f87171;
+  font-size: 0.95rem;
+}
+
+.vazio {
+  color: #c8c8c8;
+  font-size: 0.95rem;
+}
