@@ -13,7 +13,8 @@ export default function DesafioCard({ desafio, onSolicitar }: DesafioCardProps) 
 
   const handleSolicitar = async () => {
     setLoading(true);
-    try { await onSolicitar(desafio.id); } finally { setLoading(false); }
+    try { await onSolicitar(desafio.id); }
+    finally { setLoading(false); }
   };
 
   return (

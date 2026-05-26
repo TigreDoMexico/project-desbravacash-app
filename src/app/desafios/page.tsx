@@ -14,6 +14,7 @@ export default function DesafiosPage() {
   const router = useRouter();
   const [desafios, setDesafios] = useState<Desafio[]>([]);
   const [erro, setErro] = useState<string | null>(null);
+  const [aviso, setAviso] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) router.replace("/login");
@@ -29,10 +30,15 @@ export default function DesafiosPage() {
 
   const handleSolicitar = async (id: string) => {
     if (!token) return;
-    await solicitarDesafio(token, id);
-    setDesafios((prev) =>
-      prev.map((d) => (d.id === id ? { ...d, podeSolicitar: false, solicitado: true } : d))
-    );
+    setAviso(null);
+    try {
+      await solicitarDesafio(token, id);
+      setDesafios((prev) =>
+        prev.map((d) => (d.id === id ? { ...d, podeSolicitar: false, solicitado: true } : d))
+      );
+    } catch (e: unknown) {
+      setAviso(e instanceof Error ? e.message : "Erro ao solicitar o desafio.");
+    }
   };
 
   if (isLoading || !isAuthenticated || role !== "Conselheiro") return null;
@@ -40,6 +46,7 @@ export default function DesafiosPage() {
   return (
     <DashboardBackground showGreeting={false} title="Desafios das Unidades" onBack={() => router.back()}>
       {erro && <p className={styles.erro}>{erro}</p>}
+      {aviso && <div className={styles.aviso}>{aviso}</div>}
       {!erro && desafios.length === 0 && (
         <p className={styles.vazio}>Nenhum desafio disponível.</p>
       )}

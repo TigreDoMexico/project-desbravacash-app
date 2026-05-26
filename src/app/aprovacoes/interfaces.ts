@@ -1,13 +1,11 @@
-export interface Transacao {
+export interface Solicitacao {
   id: string;
-  valor: string;
-  descricao: string;
-  nomeUnidade: string;
   tipo: string;
   status: string;
-  mes: string;
-}
-
-export interface TransacoesPendentesResponse {
-  transacoes: Transacao[];
+  valor: number;
+  descricao: string;
+  criadoEm: string;
+  unidadeId: string;
+  nomeUnidade: string;
+  nomeDesafio: string | null;
 }
