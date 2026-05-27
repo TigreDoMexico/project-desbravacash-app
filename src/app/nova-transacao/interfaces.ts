@@ -1,15 +1,4 @@
-export interface ListaUnidadesResponse {
-  unidades: Unidade[];
-}
-
-export interface Unidade {
-  id: string;
-  nome: string;
-}
-
-export interface NovaTransacaoPayload {
-  unidadeId: string;
-  valor: string;
+export interface NovaSolicitacaoPayload {
   descricao: string;
-  tipoTransacao: string;
+  valor: number;
 }

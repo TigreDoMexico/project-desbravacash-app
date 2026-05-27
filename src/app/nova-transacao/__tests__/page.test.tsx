@@ -37,15 +37,7 @@ jest.mock("@/context/AuthContext", () => ({
 }));
 
 jest.mock("../service");
-const mockBuscarUnidades = service.buscarUnidades as jest.MockedFunction<typeof service.buscarUnidades>;
-const mockCriarTransacao = service.criarTransacao as jest.MockedFunction<typeof service.criarTransacao>;
-
-const unidadesMock = {
-  unidades: [
-    { id: "1", nome: "Unidade Alpha" },
-    { id: "2", nome: "Unidade Beta" },
-  ],
-};
+const mockCriarSolicitacao = service.criarSolicitacao as jest.MockedFunction<typeof service.criarSolicitacao>;
 
 describe("NovaTransacaoPage", () => {
   beforeEach(() => {
@@ -57,105 +49,80 @@ describe("NovaTransacaoPage", () => {
   });
 
   it("renderiza o formulário com os campos esperados", async () => {
-    mockBuscarUnidades.mockResolvedValue(unidadesMock);
     render(<NovaTransacaoPage />);
 
     await screen.findByLabelText("Valor");
     await screen.findByLabelText("Descrição");
-    await screen.findByRole("button", { name: "Criar Transação" })
+    await screen.findByRole("button", { name: "Criar Solicitação" });
   });
 
-  it("carrega e exibe as unidades no select", async () => {
-    mockBuscarUnidades.mockResolvedValue(unidadesMock);
-    render(<NovaTransacaoPage />);
-
-    await screen.findByRole("option", { name: "Unidade Alpha" })
-    await screen.findByRole("option", { name: "Unidade Beta" })
-  });
-
-  it("exibe mensagem de erro quando buscarUnidades falha", async () => {
-    mockBuscarUnidades.mockRejectedValue(new Error("Não foi possível carregar as unidades."));
-    render(<NovaTransacaoPage />);
-
-    await screen.findByText("Não foi possível carregar as unidades.");
-  });
-
-  it("chama criarTransacao com os dados preenchidos ao submeter", async () => {
-    mockBuscarUnidades.mockResolvedValue(unidadesMock);
-    mockCriarTransacao.mockResolvedValue(undefined);
+  it("chama criarSolicitacao com os dados preenchidos ao submeter", async () => {
+    mockCriarSolicitacao.mockResolvedValue(undefined);
     render(<NovaTransacaoPage />);
 
     await screen.findByLabelText("Valor");
 
     await userEvent.type(screen.getByLabelText("Valor"), "150");
     await userEvent.type(screen.getByLabelText("Descrição"), "Premiação mensal");
-    await userEvent.click(screen.getByRole("button", { name: "Criar Transação" }));
+    await userEvent.click(screen.getByRole("button", { name: "Criar Solicitação" }));
 
     await waitFor(() => {
-      expect(mockCriarTransacao).toHaveBeenCalledWith("token-fake", {
-        unidadeId: "1",
-        valor: "150",
+      expect(mockCriarSolicitacao).toHaveBeenCalledWith("token-fake", {
+        valor: 150,
         descricao: "Premiação mensal",
-        tipoTransacao: "credito",
       });
     });
   });
 
-  it("exibe mensagem de sucesso após criar transação", async () => {
-    mockBuscarUnidades.mockResolvedValue(unidadesMock);
-    mockCriarTransacao.mockResolvedValue(undefined);
+  it("exibe mensagem de sucesso após criar solicitação", async () => {
+    mockCriarSolicitacao.mockResolvedValue(undefined);
     render(<NovaTransacaoPage />);
 
     await screen.findByLabelText("Valor");
 
     await userEvent.type(screen.getByLabelText("Valor"), "100");
     await userEvent.type(screen.getByLabelText("Descrição"), "Teste");
-    await userEvent.click(screen.getByRole("button", { name: "Criar Transação" }));
+    await userEvent.click(screen.getByRole("button", { name: "Criar Solicitação" }));
 
-    await screen.findByText("Transação criada com sucesso!");
+    await screen.findByText("Solicitação criada com sucesso!");
   });
 
-  it("limpa os campos após criar transação com sucesso", async () => {
-    mockBuscarUnidades.mockResolvedValue(unidadesMock);
-    mockCriarTransacao.mockResolvedValue(undefined);
+  it("limpa os campos após criar solicitação com sucesso", async () => {
+    mockCriarSolicitacao.mockResolvedValue(undefined);
     render(<NovaTransacaoPage />);
 
     await screen.findByLabelText("Valor");
 
-    await waitFor(() => screen.getByLabelText("Valor"));
-
     await userEvent.type(screen.getByLabelText("Valor"), "200");
     await userEvent.type(screen.getByLabelText("Descrição"), "Teste limpeza");
-    await userEvent.click(screen.getByRole("button", { name: "Criar Transação" }));
+    await userEvent.click(screen.getByRole("button", { name: "Criar Solicitação" }));
 
     expect(screen.getByLabelText("Valor")).toHaveValue(null);
     expect(screen.getByLabelText("Descrição")).toHaveValue("");
   });
 
-  it("exibe mensagem de erro quando criarTransacao falha", async () => {
-    mockBuscarUnidades.mockResolvedValue(unidadesMock);
-    mockCriarTransacao.mockRejectedValue(new Error("Não foi possível criar a transação."));
+  it("exibe mensagem de erro quando criarSolicitacao falha", async () => {
+    mockCriarSolicitacao.mockRejectedValue(new Error("Ocorreu um erro ao criar a solicitação. Tente novamente."));
     render(<NovaTransacaoPage />);
 
     await screen.findByLabelText("Valor");
 
     await userEvent.type(screen.getByLabelText("Valor"), "50");
     await userEvent.type(screen.getByLabelText("Descrição"), "Erro");
-    await userEvent.click(screen.getByRole("button", { name: "Criar Transação" }));
+    await userEvent.click(screen.getByRole("button", { name: "Criar Solicitação" }));
 
-    await screen.findByText("Não foi possível criar a transação.");
+    await screen.findByText("Ocorreu um erro ao criar a solicitação. Tente novamente.");
   });
 
   it("desabilita o botão enquanto está enviando", async () => {
-    mockBuscarUnidades.mockResolvedValue(unidadesMock);
-    mockCriarTransacao.mockImplementation(() => new Promise(() => {}));
+    mockCriarSolicitacao.mockImplementation(() => new Promise(() => {}));
     render(<NovaTransacaoPage />);
 
     await screen.findByLabelText("Valor");
 
     await userEvent.type(screen.getByLabelText("Valor"), "50");
     await userEvent.type(screen.getByLabelText("Descrição"), "Teste");
-    await userEvent.click(screen.getByRole("button", { name: "Criar Transação" }));
+    await userEvent.click(screen.getByRole("button", { name: "Criar Solicitação" }));
 
     expect(screen.getByRole("button", { name: "Carregando..." })).toBeDisabled();
   });
@@ -176,7 +143,6 @@ describe("NovaTransacaoPage", () => {
   });
 
   it("navega para a página anterior ao clicar em Voltar", async () => {
-    mockBuscarUnidades.mockResolvedValue(unidadesMock);
     render(<NovaTransacaoPage />);
 
     await screen.findByLabelText("Valor");
