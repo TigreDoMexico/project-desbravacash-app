@@ -1,18 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { criarSolicitacao } from "./service";
+import { buscarUnidades, criarSolicitacao } from "./service";
 import styles from "./nova-transacao.module.css";
 import DashboardBackground from "@/components/layouts/DashboardBackgound/DashboardBackground";
 import Input from "@/components/ui/Input/Input";
 import Button from "@/components/ui/Button/Button";
+import { Unidade } from "./interfaces";
+import Select from "@/components/ui/Select/Select";
 
 export default function NovaTransacaoPage() {
   const { token, role, isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 
+  const [unidades, setUnidades] = useState<Unidade[]>([]);
+  const [unidadeId, setUnidadeId] = useState("");
   const [valor, setValor] = useState("");
   const [descricao, setDescricao] = useState("");
   const [erro, setErro] = useState<string | null>(null);
@@ -29,6 +33,19 @@ export default function NovaTransacaoPage() {
     return null;
   }
 
+  useEffect(() => {
+    if (!token) return;
+
+    buscarUnidades(token)
+      .then((data) => {
+        setUnidades(data.unidades);
+        if (data.unidades.length > 0) {
+          setUnidadeId(data.unidades[0].id);
+        }
+      })
+      .catch((e: Error) => setErro(e.message));
+  }, [isAuthenticated, isLoading, role, token, router]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token) return;
@@ -36,7 +53,7 @@ export default function NovaTransacaoPage() {
     setSucesso(false);
     setEnviando(true);
     try {
-      await criarSolicitacao(token, { descricao, valor: Number(valor) });
+      await criarSolicitacao(token, { descricao, valor: Number(valor), unidadeId });
       setSucesso(true);
       setValor("");
       setDescricao("");
@@ -52,6 +69,20 @@ export default function NovaTransacaoPage() {
   return (
     <DashboardBackground showGreeting={false} title="Nova Solicitação" onBack={() => router.back()}>
       <form className={styles.form} onSubmit={handleSubmit}>
+        <Select
+          label="Unidade"
+          id="unidade"
+          type="select"
+          value={unidadeId}
+          onChange={(e) => setUnidadeId(e.target.value)}
+          required
+        >
+          {unidades.map((unidade) => (
+            <option key={unidade.id} value={unidade.id}>
+              {unidade.nome}
+            </option>
+          ))}
+        </Select>
         <Input
           label="Valor"
           id="valor"

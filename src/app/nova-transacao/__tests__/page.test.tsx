@@ -37,7 +37,15 @@ jest.mock("@/context/AuthContext", () => ({
 }));
 
 jest.mock("../service");
+const mockBuscarUnidades = service.buscarUnidades as jest.MockedFunction<typeof service.buscarUnidades>;
 const mockCriarSolicitacao = service.criarSolicitacao as jest.MockedFunction<typeof service.criarSolicitacao>;
+
+const unidadesMock = {
+  unidades: [
+    { id: "1", nome: "Unidade Alpha" },
+    { id: "2", nome: "Unidade Beta" },
+  ],
+};
 
 describe("NovaTransacaoPage", () => {
   beforeEach(() => {
@@ -49,6 +57,7 @@ describe("NovaTransacaoPage", () => {
   });
 
   it("renderiza o formulário com os campos esperados", async () => {
+    mockBuscarUnidades.mockResolvedValue(unidadesMock);
     render(<NovaTransacaoPage />);
 
     await screen.findByLabelText("Valor");
@@ -56,7 +65,16 @@ describe("NovaTransacaoPage", () => {
     await screen.findByRole("button", { name: "Criar Solicitação" });
   });
 
+  it("carrega e exibe as unidades no select", async () => {
+    mockBuscarUnidades.mockResolvedValue(unidadesMock);
+    render(<NovaTransacaoPage />);
+
+    await screen.findByRole("option", { name: "Unidade Alpha" })
+    await screen.findByRole("option", { name: "Unidade Beta" })
+  });
+
   it("chama criarSolicitacao com os dados preenchidos ao submeter", async () => {
+    mockBuscarUnidades.mockResolvedValue(unidadesMock);
     mockCriarSolicitacao.mockResolvedValue(undefined);
     render(<NovaTransacaoPage />);
 
@@ -70,11 +88,13 @@ describe("NovaTransacaoPage", () => {
       expect(mockCriarSolicitacao).toHaveBeenCalledWith("token-fake", {
         valor: 150,
         descricao: "Premiação mensal",
+        unidadeId: "1",
       });
     });
   });
 
   it("exibe mensagem de sucesso após criar solicitação", async () => {
+    mockBuscarUnidades.mockResolvedValue(unidadesMock);
     mockCriarSolicitacao.mockResolvedValue(undefined);
     render(<NovaTransacaoPage />);
 
@@ -88,6 +108,7 @@ describe("NovaTransacaoPage", () => {
   });
 
   it("limpa os campos após criar solicitação com sucesso", async () => {
+    mockBuscarUnidades.mockResolvedValue(unidadesMock);
     mockCriarSolicitacao.mockResolvedValue(undefined);
     render(<NovaTransacaoPage />);
 
@@ -97,11 +118,16 @@ describe("NovaTransacaoPage", () => {
     await userEvent.type(screen.getByLabelText("Descrição"), "Teste limpeza");
     await userEvent.click(screen.getByRole("button", { name: "Criar Solicitação" }));
 
-    expect(screen.getByLabelText("Valor")).toHaveValue(null);
-    expect(screen.getByLabelText("Descrição")).toHaveValue("");
+    await waitFor(() => {
+      const valorInput = screen.getByLabelText("Valor") as HTMLInputElement;
+      const descricaoInput = screen.getByLabelText("Descrição") as HTMLInputElement;
+      expect(valorInput.value).toBe("");
+      expect(descricaoInput.value).toBe("");
+    });
   });
 
   it("exibe mensagem de erro quando criarSolicitacao falha", async () => {
+    mockBuscarUnidades.mockResolvedValue(unidadesMock);
     mockCriarSolicitacao.mockRejectedValue(new Error("Ocorreu um erro ao criar a solicitação. Tente novamente."));
     render(<NovaTransacaoPage />);
 
@@ -115,6 +141,7 @@ describe("NovaTransacaoPage", () => {
   });
 
   it("desabilita o botão enquanto está enviando", async () => {
+    mockBuscarUnidades.mockResolvedValue(unidadesMock);
     mockCriarSolicitacao.mockImplementation(() => new Promise(() => {}));
     render(<NovaTransacaoPage />);
 

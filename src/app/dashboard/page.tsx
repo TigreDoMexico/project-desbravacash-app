@@ -58,7 +58,7 @@ export default function DashboardPage() {
                 label="Ver Extrato"
                 onClick={() => router.push("/extrato")}
               />
-              {(isAdmin || isTesoureiro)  && (
+              {(isAdmin || isTesoureiro) && (
                 <QuickActionButton
                   icon={<Plus size={22} />}
                   label="Nova Transação"
