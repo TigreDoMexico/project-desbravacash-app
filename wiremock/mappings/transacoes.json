@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "url": "/api/transacoes/pendentes"
+    "url": "/api/transacoes"
   },
   "response": {
     "status": 200,
@@ -11,22 +11,20 @@
     "jsonBody": {
       "transacoes": [
         {
-          "id": "1",
+          "id": "00000000-0000-0000-0000-000000000001",
           "valor": "500",
           "descricao": "Participação em evento regional",
-          "nomeUnidade": "Unidade Norte",
-          "tipo": "credito",
-          "status": "pendente",
-          "mes": "2025-06"
+          "tipo": "Credito",
+          "mes": "Janeiro",
+          "nomeUnidade": "Unidade Norte"
         },
         {
-          "id": "2",
+          "id": "00000000-0000-0000-0000-000000000002",
           "valor": "150",
           "descricao": "Compra de material",
-          "nomeUnidade": "Unidade Sul",
-          "tipo": "debito",
-          "status": "pendente",
-          "mes": "2025-06"
+          "tipo": "Debito",
+          "mes": "Fevereiro",
+          "nomeUnidade": "Unidade Norte"
         }
       ]
     }

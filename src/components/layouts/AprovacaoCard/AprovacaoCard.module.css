@@ -1,51 +1,163 @@
 .item {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   background-color: var(--white);
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 1rem 1.25rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  gap: 1rem;
+  gap: 0.6rem;
 }
 
-.info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  flex: 1;
+.flag {
+  align-self: flex-start;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+.flagDesafio {
+  background-color: #ede9fe;
+  color: #4F46E5;
+}
+
+.flagManual {
+  background-color: #dcfce7;
+  color: #15803d;
 }
 
 .descricao {
   font-size: 0.95rem;
   font-weight: 600;
   color: #144632;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.4;
 }
 
-.meta {
-  font-size: 0.8rem;
+.dataMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
   color: #888;
 }
 
-.valor {
-  font-size: 1rem;
-  font-weight: 700;
+.nomeUnidade {
+  margin-left: auto;
+  font-weight: 600;
+  color: #555;
 }
 
-.credito { color: #3A9465; }
-.debito  { color: #b41e1e; }
+.divider {
+  border: none;
+  border-top: 1px solid #ebebeb;
+  margin: 0.1rem 0;
+}
+
+.valorRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding-left: 1.75rem;
+}
+
+.stepBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #144632;
+  transition: background-color 0.15s;
+  flex-shrink: 0;
+}
+
+.stepBtn:hover:not(:disabled) {
+  background-color: #e0e0e0;
+}
+
+.stepBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.valorInput {
+  width: 7em;
+  padding: 0.3rem 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #144632;
+  text-align: center;
+}
+
+.valorInput:disabled {
+  opacity: 0.5;
+}
+
+/* hide native number arrows */
+.valorInput::-webkit-outer-spin-button,
+.valorInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+.valorInput[type=number] {
+  -moz-appearance: textfield;
+}
+
+.pts {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #888;
+}
 
 .actions {
   display: flex;
   gap: 0.5rem;
-  flex-shrink: 0;
+  justify-content: center;
+}
+
+.actions .aprovar,
+.actions .reprovar {
+  flex: 1;
+  justify-content: center;
+}
+
+.confirmacao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  gap: 0.75rem;
+}
+
+.confirmacaoTexto {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.confirmacaoBtns {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .aprovar {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.4rem 0.75rem;
+  padding: 0.4rem 1rem;
   background-color: #3A9465;
   color: var(--white);
   border: none;
@@ -60,7 +172,7 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.4rem 0.75rem;
+  padding: 0.4rem 1rem;
   background-color: #b41e1e;
   color: var(--white);
   border: none;
@@ -71,13 +183,29 @@
   transition: opacity 0.2s;
 }
 
+.cancelar {
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 0.75rem;
+  background-color: #e0e0e0;
+  color: #444;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
 .aprovar:hover,
-.reprovar:hover {
+.reprovar:hover,
+.cancelar:hover {
   opacity: 0.85;
 }
 
 .aprovar:disabled,
-.reprovar:disabled {
+.reprovar:disabled,
+.cancelar:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }

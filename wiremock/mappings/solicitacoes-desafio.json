@@ -1,0 +1,9 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPathPattern": "/api/solicitacoes/desafio/[^/]+"
+  },
+  "response": {
+    "status": 201
+  }
+}
