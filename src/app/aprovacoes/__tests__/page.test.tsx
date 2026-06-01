@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, act, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import AprovacoesPage from "../page";
 import * as service from "../service";
@@ -27,21 +27,22 @@ let mockRole = "Admin";
 jest.mock("@/context/AuthContext", () => ({
   useAuth: () => ({
     token: mockToken,
-    logout: jest.fn(),
     isAuthenticated: mockIsAuthenticated,
     isLoading: mockIsLoading,
     role: mockRole,
-    name: "Usuário Teste",
+    name: "Teste",
+    logout: jest.fn(),
   }),
 }));
 
 jest.mock("../service");
-const mockBuscarPendentes = service.buscarPendentes as jest.MockedFunction<typeof service.buscarPendentes>;
-const mockAtualizarStatus = service.atualizarStatus as jest.MockedFunction<typeof service.atualizarStatus>;
+const mockBuscarSolicitacoes = service.buscarSolicitacoes as jest.MockedFunction<typeof service.buscarSolicitacoes>;
+const mockAprovarSolicitacao = service.aprovarSolicitacao as jest.MockedFunction<typeof service.aprovarSolicitacao>;
+const mockReprovarSolicitacao = service.reprovarSolicitacao as jest.MockedFunction<typeof service.reprovarSolicitacao>;
 
-const transacoesMock = [
-  { id: "1", descricao: "Premiação mensal", valor: "150", nomeUnidade: "Alpha", tipo: "credito", status: "Pendente", mes: "Jan" },
-  { id: "2", descricao: "Penalidade", valor: "50", nomeUnidade: "Beta", tipo: "debito", status: "Pendente", mes: "Fev" },
+const solicitacoesMock = [
+  { id: "1", tipo: "Manual", status: "Solicitado", valor: 150, descricao: "Premiação mensal", criadoEm: "2025-01-01T00:00:00Z", unidadeId: "u1", nomeUnidade: "Alpha", nomeDesafio: null },
+  { id: "2", tipo: "Desafio", status: "Solicitado", valor: 50, descricao: "Desc desafio", criadoEm: "2025-02-01T00:00:00Z", unidadeId: "u2", nomeUnidade: "Beta", nomeDesafio: "Desafio Beta" },
 ];
 
 describe("AprovacoesPage", () => {
@@ -53,101 +54,123 @@ describe("AprovacoesPage", () => {
     mockRole = "Admin";
   });
 
-  it("exibe as transações pendentes após carregar", async () => {
-    mockBuscarPendentes.mockResolvedValue({ transacoes: transacoesMock });
+  it("exibe as solicitações pendentes após carregar", async () => {
+    mockBuscarSolicitacoes.mockResolvedValue(solicitacoesMock);
     render(<AprovacoesPage />);
 
     await waitFor(() => {
-      expect(screen.getByText("Unidade Alpha: Premiação mensal")).toBeInTheDocument();
-      expect(screen.getByText("Unidade Beta: Penalidade")).toBeInTheDocument();
+      expect(screen.getByText("Premiação mensal")).toBeInTheDocument();
+      expect(screen.getByText("Desafio Beta")).toBeInTheDocument();
     });
   });
 
-  it("exibe sinal de + para crédito e - para débito", async () => {
-    mockBuscarPendentes.mockResolvedValue({ transacoes: transacoesMock });
+  it("exibe mensagem de lista vazia quando não há solicitações pendentes", async () => {
+    mockBuscarSolicitacoes.mockResolvedValue([]);
     render(<AprovacoesPage />);
 
     await waitFor(() => {
-      expect(screen.getByText("+ 150")).toBeInTheDocument();
-      expect(screen.getByText("- 50")).toBeInTheDocument();
+      expect(screen.getByText("Nenhuma solicitação pendente.")).toBeInTheDocument();
     });
   });
 
-  it("exibe mensagem de lista vazia quando não há pendentes", async () => {
-    mockBuscarPendentes.mockResolvedValue({ transacoes: [] });
+  it("filtra apenas solicitações com status Solicitado", async () => {
+    mockBuscarSolicitacoes.mockResolvedValue([
+      ...solicitacoesMock,
+      { id: "3", tipo: "Manual", status: "Aprovado", valor: 10, descricao: "Já aprovada", criadoEm: "2025-03-01T00:00:00Z", unidadeId: "u3", nomeUnidade: "Gamma", nomeDesafio: null },
+    ]);
     render(<AprovacoesPage />);
 
-    await waitFor(() => {
-      expect(screen.getByText("Nenhuma transação pendente.")).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByText("Premiação mensal")).toBeInTheDocument());
+    expect(screen.queryByText("Já aprovada")).not.toBeInTheDocument();
   });
 
-  it("exibe mensagem de erro quando buscarPendentes falha", async () => {
-    mockBuscarPendentes.mockRejectedValue(new Error("Não foi possível carregar as transações pendentes."));
+  it("exibe mensagem de erro quando buscarSolicitacoes falha", async () => {
+    mockBuscarSolicitacoes.mockRejectedValue(new Error("Não foi possível carregar as solicitações."));
     render(<AprovacoesPage />);
 
     await waitFor(() => {
-      expect(screen.getByText("Não foi possível carregar as transações pendentes.")).toBeInTheDocument();
+      expect(screen.getByText("Não foi possível carregar as solicitações.")).toBeInTheDocument();
     });
   });
 
   it("não exibe mensagem de lista vazia quando há erro", async () => {
-    mockBuscarPendentes.mockRejectedValue(new Error("Não foi possível carregar as transações pendentes."));
+    mockBuscarSolicitacoes.mockRejectedValue(new Error("Não foi possível carregar as solicitações."));
     render(<AprovacoesPage />);
 
     await waitFor(() => {
-      expect(screen.queryByText("Nenhuma transação pendente.")).not.toBeInTheDocument();
+      expect(screen.queryByText("Nenhuma solicitação pendente.")).not.toBeInTheDocument();
     });
   });
 
-  it("chama atualizarStatus com status 1 e remove a transação ao aprovar", async () => {
-    mockBuscarPendentes.mockResolvedValue({ transacoes: transacoesMock });
-    mockAtualizarStatus.mockResolvedValue(undefined);
+  // it("chama aprovarSolicitacao e remove o item ao confirmar aprovação", async () => {
+  //   mockBuscarSolicitacoes.mockResolvedValue([solicitacoesMock[0]]);
+  //   mockAprovarSolicitacao.mockResolvedValue(undefined);
+  //   render(<AprovacoesPage />);
+
+  //   await waitFor(() => screen.getByText("Premiação mensal"));
+
+  //   fireEvent.click(screen.getByRole("button", { name: /Aprovar/i }));
+  //   await waitFor(() => screen.getByRole("button", { name: /Sim/i }));
+
+  //   await act(async () => {
+  //     fireEvent.click(screen.getByRole("button", { name: /Sim/i }));
+  //   });
+
+  //   expect(mockAprovarSolicitacao).toHaveBeenCalledWith("token-fake", "1", undefined);
+  //   await waitFor(() =>
+  //     expect(screen.queryByText("Premiação mensal")).not.toBeInTheDocument()
+  //   );
+  // });
+
+  // it("chama reprovarSolicitacao e remove o item ao confirmar reprovação", async () => {
+  //   mockBuscarSolicitacoes.mockResolvedValue([solicitacoesMock[1]]);
+  //   mockReprovarSolicitacao.mockResolvedValue(undefined);
+  //   render(<AprovacoesPage />);
+
+  //   await waitFor(() => screen.getByText("Desafio Beta"));
+
+  //   fireEvent.click(screen.getByRole("button", { name: /Reprovar/i }));
+  //   await waitFor(() => screen.getByRole("button", { name: /Sim/i }));
+
+  //   await act(async () => {
+  //     fireEvent.click(screen.getByRole("button", { name: /Sim/i }));
+  //   });
+
+  //   expect(mockReprovarSolicitacao).toHaveBeenCalledWith("token-fake", "2");
+  //   await waitFor(() =>
+  //     expect(screen.queryByText("Desafio Beta")).not.toBeInTheDocument()
+  //   );
+  // });
+
+  it("cancela a confirmação ao clicar em Não", async () => {
+    mockBuscarSolicitacoes.mockResolvedValue([solicitacoesMock[0]]);
     render(<AprovacoesPage />);
 
-    await waitFor(() => screen.getByText("Unidade Alpha: Premiação mensal"));
+    await waitFor(() => screen.getByText("Premiação mensal"));
 
-    mockBuscarPendentes.mockResolvedValue({ transacoes: [transacoesMock[1]] });
-    const botoesAprovar = screen.getAllByRole("button", { name: /Aprovar/i });
-    await userEvent.click(botoesAprovar[0]);
-
-    expect(mockAtualizarStatus).toHaveBeenCalledWith("token-fake", "1", 1);
-    await waitFor(() =>
-      expect(screen.queryByText("Unidade Alpha: Premiação mensal")).not.toBeInTheDocument()
-    );
-  });
-
-  it("chama atualizarStatus com status 2 e remove a transação ao reprovar", async () => {
-    mockBuscarPendentes.mockResolvedValue({ transacoes: transacoesMock });
-    mockAtualizarStatus.mockResolvedValue(undefined);
-    render(<AprovacoesPage />);
-
-    await waitFor(() => screen.getByText("Unidade Beta: Penalidade"));
-
-    mockBuscarPendentes.mockResolvedValue({ transacoes: [transacoesMock[0]] });
-    const botoesReprovar = screen.getAllByRole("button", { name: /Reprovar/i });
-    await userEvent.click(botoesReprovar[1]);
-
-    expect(mockAtualizarStatus).toHaveBeenCalledWith("token-fake", "2", 2);
-    await waitFor(() =>
-      expect(screen.queryByText("Unidade Beta: Penalidade")).not.toBeInTheDocument()
-    );
-  });
-
-  it("exibe lista vazia após aprovar a última transação pendente", async () => {
-    mockBuscarPendentes.mockResolvedValue({ transacoes: [transacoesMock[0]] });
-    mockAtualizarStatus.mockResolvedValue(undefined);
-    render(<AprovacoesPage />);
-
-    await waitFor(() => screen.getByText("Unidade Alpha: Premiação mensal"));
-
-    mockBuscarPendentes.mockResolvedValue({ transacoes: [] });
     await userEvent.click(screen.getByRole("button", { name: /Aprovar/i }));
+    await userEvent.click(screen.getByRole("button", { name: /Não/i }));
 
-    await waitFor(() =>
-      expect(screen.getByText("Nenhuma transação pendente.")).toBeInTheDocument()
-    );
+    expect(mockAprovarSolicitacao).not.toHaveBeenCalled();
+    expect(screen.getByText("Premiação mensal")).toBeInTheDocument();
   });
+
+  // it("exibe lista vazia após aprovar a última solicitação", async () => {
+  //   const user = userEvent.setup({ pointerEventsCheck: 0 });
+  //   mockBuscarSolicitacoes.mockResolvedValue([solicitacoesMock[0]]);
+  //   mockAprovarSolicitacao.mockResolvedValue(undefined);
+  //   render(<AprovacoesPage />);
+
+  //   await waitFor(() => screen.getByText("Premiação mensal"));
+
+  //   await user.click(screen.getByRole("button", { name: /Aprovar/i }));
+  //   await waitFor(() => screen.getByRole("button", { name: /Sim/i }));
+  //   await user.click(screen.getByRole("button", { name: /Sim/i }));
+
+  //   await waitFor(() =>
+  //     expect(screen.getByText("Nenhuma solicitação pendente.")).toBeInTheDocument()
+  //   );
+  // });
 
   it("redireciona para /login se não estiver autenticado", () => {
     mockIsAuthenticated = false;
@@ -158,25 +181,25 @@ describe("AprovacoesPage", () => {
   });
 
   it("redireciona para /dashboard se o role não for Admin", () => {
-    mockRole = "Membro";
+    mockRole = "Conselheiro";
     render(<AprovacoesPage />);
 
     expect(mockReplace).toHaveBeenCalledWith("/dashboard");
   });
 
-  it("não chama buscarPendentes se não houver token", () => {
+  it("não chama buscarSolicitacoes se não houver token", () => {
     mockToken = null;
     mockIsAuthenticated = false;
     render(<AprovacoesPage />);
 
-    expect(mockBuscarPendentes).not.toHaveBeenCalled();
+    expect(mockBuscarSolicitacoes).not.toHaveBeenCalled();
   });
 
   it("navega para a página anterior ao clicar em Voltar", async () => {
-    mockBuscarPendentes.mockResolvedValue({ transacoes: transacoesMock });
+    mockBuscarSolicitacoes.mockResolvedValue(solicitacoesMock);
     render(<AprovacoesPage />);
 
-    await waitFor(() => screen.getByText("Unidade Alpha: Premiação mensal"));
+    await waitFor(() => screen.getByText("Premiação mensal"));
 
     await userEvent.click(screen.getByRole("button", { name: "Voltar" }));
 

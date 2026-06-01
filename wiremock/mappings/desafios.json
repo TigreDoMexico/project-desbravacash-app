@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/desafios"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": [
+      {
+        "id": "00000000-0000-0000-0000-000000000001",
+        "descricao": "Desafio de Leitura",
+        "pontuacao": 50,
+        "dataConclusao": "2025-12-31T00:00:00",
+        "podeSolicitar": true,
+        "solicitado": false,
+        "concluido": false
+      },
+      {
+        "id": "00000000-0000-0000-0000-000000000002",
+        "descricao": "Desafio de Evangelismo",
+        "pontuacao": 100,
+        "dataConclusao": "2025-11-30T00:00:00",
+        "podeSolicitar": false,
+        "solicitado": true,
+        "concluido": false
+      }
+    ]
+  }
+}
