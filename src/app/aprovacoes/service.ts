@@ -1,26 +1,29 @@
-import { TransacoesPendentesResponse } from "./interfaces";
+import { Solicitacao } from "./interfaces";
 
 const API_URL = process.env.NEXT_PUBLIC_DESBRAVA_API_URL;
 
-export const buscarPendentes = async (token: string): Promise<TransacoesPendentesResponse> => {
-  const res = await fetch(`${API_URL}/api/transacoes/pendentes`, {
+export const buscarSolicitacoes = async (token: string): Promise<Solicitacao[]> => {
+  const res = await fetch(`${API_URL}/api/solicitacoes`, {
     headers: { Authorization: `Bearer ${token}` },
   });
-
-  if (!res.ok) throw new Error("Não foi possível carregar as transações pendentes.");
-
+  if (!res.ok) throw new Error("Não foi possível carregar as solicitações.");
   return res.json();
 };
 
-export const atualizarStatus = async (token: string, id: string, status: 1 | 2): Promise<void> => {
-  const res = await fetch(`${API_URL}/api/transacoes/${id}/status`, {
+export const aprovarSolicitacao = async (token: string, id: string, valor?: number): Promise<void> => {
+  const res = await fetch(`${API_URL}/api/solicitacoes/${id}/aprovar`, {
     method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ Status: status }),
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: valor !== undefined ? JSON.stringify({ valor }) : undefined,
   });
+  if (!res.ok) throw new Error("Não foi possível aprovar a solicitação.");
+};
 
-  if (!res.ok) throw new Error("Não foi possível atualizar o status da transação.");
+export const reprovarSolicitacao = async (token: string, id: string): Promise<void> => {
+  const res = await fetch(`${API_URL}/api/solicitacoes/${id}/reprovar`, {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({}),
+  });
+  if (!res.ok) throw new Error("Não foi possível reprovar a solicitação.");
 };

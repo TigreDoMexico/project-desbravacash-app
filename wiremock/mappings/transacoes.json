@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/transacoes"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "transacoes": [
+        {
+          "id": "00000000-0000-0000-0000-000000000001",
+          "valor": "500",
+          "descricao": "Participação em evento regional",
+          "tipo": "Credito",
+          "mes": "Janeiro",
+          "nomeUnidade": "Unidade Norte"
+        },
+        {
+          "id": "00000000-0000-0000-0000-000000000002",
+          "valor": "150",
+          "descricao": "Compra de material",
+          "tipo": "Debito",
+          "mes": "Fevereiro",
+          "nomeUnidade": "Unidade Norte"
+        }
+      ]
+    }
+  }
+}
